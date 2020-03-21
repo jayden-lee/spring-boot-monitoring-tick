@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: true
+management:
+  metrics:
+    export:
+      influx:
+        uri: http://localhost:8086
+        step: 5s
+      statsd:
+        enabled: true
+        flavor: telegraf
+        host: 8125
+    enable:
+      jvm: true
+    web:
+      client:
+        request:
+          autotime:
+            enabled: true
+      server:
+        request:
+          autotime:
+            enabled: true
