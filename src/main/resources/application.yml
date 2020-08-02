@@ -1,9 +1,18 @@
 spring:
+  profiles:
+    active: local
+  application:
+    name: tick
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
     username: sa
     password:
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 30
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -13,33 +22,10 @@ spring:
 management:
   metrics:
     export:
-      influx:
-        uri: http://localhost:8086
-        step: 5s
       statsd:
         enabled: true
         flavor: telegraf
-        host: 8125
-    enable:
-      jvm: true
-    web:
-      client:
-        request:
-          autotime:
-            enabled: true
-      server:
-        request:
-          autotime:
-            enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health,metrics,httptrace
-  endpoint:
-    health:
-      show-details: always
-  auditevents:
-    enabled: true
-  trace:
-    http:
-      enabled: true
+        polling-frequency: 5s
+    tags:
+      application: ${spring.application.name}
+      active: ${spring.profiles.active}

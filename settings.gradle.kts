@@ -1,1 +1,1 @@
-rootProject.name = "monitoring"
+rootProject.name = "tick"

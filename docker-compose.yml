@@ -1,8 +1,7 @@
 version: "3"
 services:
-  # Define a Telegraf service
   telegraf:
-    image: telegraf:1.5.3
+    image: telegraf:1.11.5
     volumes:
       - ./etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     links:
@@ -10,17 +9,15 @@ services:
     ports:
       - "8125:8125/udp"
 
-  # Define an InfluxDB service
   influxdb:
-    image: influxdb:1.5.1
+    image: influxdb:1.8
     volumes:
       - ./data/influxdb:/var/lib/influxdb
     ports:
       - "8086:8086"
 
-  # Define a Chronograf service
   chronograf:
-    image: chronograf:1.4.3.1
+    image: chronograf:1.8
     environment:
       INFLUXDB_URL: http://influxdb:8086
       KAPACITOR_URL: http://kapacitor:9092
@@ -30,9 +27,8 @@ services:
       - influxdb
       - kapacitor
 
-  # Define a Kapacitor service
   kapacitor:
-    image: kapacitor:1.4.1
+    image: kapacitor:1.5.4
     environment:
       KAPACITOR_HOSTNAME: kapacitor
       KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
@@ -40,17 +36,3 @@ services:
       - influxdb
     ports:
       - "9092:9092"
-
-  # Define a spring service for using the tics.
-  spring-tick:
-    image: gglee/spring-monitoring:0.0.1
-    environment:
-      INFLUXDB_URL: http://influxdb:8086
-    ports:
-      - "8080:8080"
-    depends_on:
-      - influxdb
-      - telegraf
-    links:
-      - influxdb
-      - telegraf
