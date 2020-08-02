@@ -1,6 +1,6 @@
-# Spring Boot Monitoring
+# Spring Boot Monitoring Tick
 
-## TICK Stack
+## Tick Stack
 - Telegraf
 - InfluxDB
 - Chronograf
