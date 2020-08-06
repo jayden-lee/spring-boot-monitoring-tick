@@ -19,13 +19,12 @@ spring:
     generate-ddl: true
     show-sql: true
 
-management:
-  metrics:
-    export:
-      statsd:
-        enabled: true
-        flavor: telegraf
-        polling-frequency: 5s
-    tags:
-      application: ${spring.application.name}
-      active: ${spring.profiles.active}
+management.metrics:
+  export:
+    statsd:
+      enabled: true
+      flavor: telegraf
+      polling-frequency: 5s
+  tags:
+    application: ${spring.application.name}
+    active: ${spring.profiles.active}

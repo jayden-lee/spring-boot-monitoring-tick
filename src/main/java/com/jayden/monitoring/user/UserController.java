@@ -2,7 +2,7 @@ package com.jayden.monitoring.user;
 
 import com.jayden.monitoring.db.entity.User;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +14,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final MeterRegistry meterRegistry;
 
     @PostMapping
     public User createUser(@RequestBody CreateUserRequest request) {
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     private void increaseCount(User user, String name) {
-        Counter counter = Metrics.counter(name, "userId", user.getId().toString(), "name", user.getName());
+        Counter counter = meterRegistry.counter(name, "user", user.getId().toString(), "name", user.getName());
         counter.increment();
     }
 }
