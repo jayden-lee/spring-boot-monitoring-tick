@@ -1,11 +1,14 @@
 package com.jayden.monitoring.config;
 
+import com.google.common.cache.CacheBuilder;
 import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.config.NamingConvention;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.statsd.StatsdConfig;
+import io.micrometer.statsd.StatsdMeterRegistry;
 import org.springframework.boot.actuate.metrics.web.servlet.DefaultWebMvcTagsProvider;
 import org.springframework.boot.actuate.metrics.web.servlet.WebMvcTagsProvider;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
-import com.google.common.cache.CacheBuilder;
 
 @Configuration
 public class MeterConfiguration {
@@ -28,10 +30,10 @@ public class MeterConfiguration {
         .asMap();
 
     @Bean
-    public MeterRegistry meterRegistry() {
-        MeterRegistry meterRegistry = new SimpleMeterRegistry();
-        meterRegistry.config().namingConvention(NamingConvention.dot);
-        return meterRegistry;
+    public StatsdMeterRegistry statsdMeterRegistry(StatsdConfig statsdConfig, Clock clock) {
+        StatsdMeterRegistry statsdMeterRegistry = new StatsdMeterRegistry(statsdConfig, clock);
+        statsdMeterRegistry.config().namingConvention(NamingConvention.dot);
+        return statsdMeterRegistry;
     }
 
     @Bean
